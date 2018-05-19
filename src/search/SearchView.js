@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {SearchButton} from "../shared/components/SearchButton";
+import {PrimaryButton} from "../shared/components/PrimaryButton";
 
 export class SearchView extends Component {
     render() {
         const {onSearchClick} = this.props;
         return (
             <div>
-                <SearchButton text={`Search for the flights`} onClick={onSearchClick}/>
+                <PrimaryButton text={`Search for the flights`} onClick={onSearchClick}/>
             </div>
         )
     }

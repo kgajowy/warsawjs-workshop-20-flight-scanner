@@ -26,10 +26,7 @@ class App extends Component {
     onBackClick() {
         this.setState({
             searchVisible: true
-        }, () => {
-            console.log(this.state);
         });
-        console.log(this.state);
     }
 
     render() {

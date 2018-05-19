@@ -1,17 +1,18 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import RaisedButton from 'material-ui/RaisedButton';
 
-export class SearchButton extends Component {
+export class PrimaryButton extends Component {
     render() {
         const {text, onClick} = this.props; //destructing
         return (
-            <button onClick={onClick}>{text}</button>
+            <RaisedButton primary onClick={onClick} label={text}/>
         )
     }
 }
 
 
-SearchButton.propTypes = {
+PrimaryButton.propTypes = {
     text: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired
 };

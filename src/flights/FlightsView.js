@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {PrimaryButton} from "../shared/components/PrimaryButton";
 
 export class FlightsView extends Component {
     render() {
@@ -11,7 +12,7 @@ export class FlightsView extends Component {
                     <li>Flight #2</li>
                     <li>Flight #3</li>
                 </ol>
-                <button onClick={onBackClick}>Go back</button>
+                <PrimaryButton text={`Go back`} onClick={onBackClick}/>
             </div>
         )
     }

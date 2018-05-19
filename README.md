@@ -77,7 +77,7 @@ Please find the proposed agenda below - what we will build step by step.
     };
     ```
 
-    Try writing `<SearchButton` and press space (or any other way to see hints!)
+    Try writing `<PrimaryButton` and press space (or any other way to see hints!)
 
     * ... but I want to mark it as mandatory!
 
@@ -172,7 +172,7 @@ Please find the proposed agenda below - what we will build step by step.
 
     ```
 
-    * and modify SearchButton to make use of passed onClick prop
+    * and modify PrimaryButton to make use of passed onClick prop
     ```
     <button onClick={onClick}>{text}</button>
     ```
@@ -245,14 +245,69 @@ Please find the proposed agenda below - what we will build step by step.
 - [ ] a few words about router https://reacttraining.com/react-router/web/guides/quick-start
 
 ### Adding dependencies - material-ui / styling
+* pull branch `step_2` from this repo if necessary
+- [ ] installing the dependency & usage
+    * https://v0.material-ui.com/#/get-started/usage
+    * `npm i material-ui --save`
+    * wrap app in Theme - index.js!
+    * stateless component explanation (props, state, 'simple wrapper')
+    ```
+    import React from 'react';
+    import ReactDOM from 'react-dom';
+    import './index.css';
+    import App from './App';
+    import registerServiceWorker from './registerServiceWorker';
+    import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-- [ ] installing the dependency
+    const ThemedApp = () => (
+        <MuiThemeProvider>
+            <App/>
+        </MuiThemeProvider>
+    )
+
+    ReactDOM.render(<ThemedApp />, document.getElementById('root'));
+    registerServiceWorker();
+
+    ```
 - [ ] changing "Next Button" to use materia-ui
-- [ ] testing a few other component we will need (Datepicker, ActivityIndicator/Spinner)
-- [ ] Create 2 inputs with "dummy" source
+    * code
+        ```
+        import React, {Component} from 'react';
+        import PropTypes from 'prop-types';
+        import RaisedButton from 'material-ui/RaisedButton';
+
+        export class SearchButton extends Component {
+            render() {
+                const {text, onClick} = this.props; //destructing
+                return (
+                    <RaisedButton primary onClick={onClick} label={text}/>
+                )
+            }
+        }
+
+
+        SearchButton.propTypes = {
+            text: PropTypes.string.isRequired,
+            onClick: PropTypes.func.isRequired
+        };
+        ```
+    * notice the way we needed to change innerHtml {text} to label to apply styles correctly!
+
+- [ ] refactor task - change our second button!
+    * DRY
+    * keep UI consistent
+    * code
+    ```
+    //FlightView > render() method
+    <PrimaryButton text={`Go back`} onClick={onBackClick}/>
+    ```
+
+- [ ] other components which we will need (Datepicker, ActivityIndicator/Spinner) - check out the documentation!
+    * https://v0.material-ui.com/#/components/date-picker
+    * https://v0.material-ui.com/#/components/refresh-indicator
 
 ### Adding dependencies - axios / API Service
-
+* pull branch `step_3` from this repo if necessary
 - [ ] installing the dependency
 - [ ] making a "Service" to fetch Locations
 - [ ] few words about Views, Models and Services
