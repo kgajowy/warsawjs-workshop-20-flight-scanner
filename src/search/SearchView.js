@@ -4,15 +4,15 @@ import {SearchButton} from "../shared/components/SearchButton";
 
 export class SearchView extends Component {
     render() {
-        const {onClick} = this.props;
+        const {onSearchClick} = this.props;
         return (
             <div>
-                <SearchButton text={`Search for the flights`} onClick={onClick}/>
+                <SearchButton text={`Search for the flights`} onClick={onSearchClick}/>
             </div>
         )
     }
 }
 
 SearchView.propTypes = {
-    onClick: PropTypes.func.isRequired
+    onSearchClick: PropTypes.func.isRequired
 };

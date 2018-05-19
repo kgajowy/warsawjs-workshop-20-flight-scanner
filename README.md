@@ -172,8 +172,7 @@ Please find the proposed agenda below - what we will build step by step.
 
     ```
 
-    * and modify SearchButton to make use of passed onClick prop:
-
+    * and modify SearchButton to make use of passed onClick prop
     ```
     <button onClick={onClick}>{text}</button>
     ```
@@ -201,7 +200,49 @@ Please find the proposed agenda below - what we will build step by step.
      ```
 
 - [ ] keeping values in "state" - what it is and how it differs from props? (change over time vs. const)
-- [ ] a few words about router
+    * pull branch `step_1` with previous changes if necessary
+    * add our first state
+    ```
+    state = {
+        searchVisible: true
+    };
+
+    searchPressed() {
+        this.setState({
+            searchVisible: false
+        })
+    }
+    ```
+    * why it fails? what about `this` and where our `context` went? Stateful component!
+    ```
+    constructor(props){
+            super(props);
+            this.searchPressed = this.searchPressed.bind(this);
+        }
+    ```
+    * being aware of not making `bind` within render
+    * conditional rendering
+    ```
+    //inside render()
+    {searchVisible && <SearchView onClick={this.searchPressed}/>}
+    {!searchVisible && <FlightsView/>}
+    ```
+    * naming convenction (not strictly React) - onPress vs onPressed
+    * adding a way back (exercise)
+    * a few words about setState async
+    ```
+    onBackClick() {
+        this.setState({
+            searchVisible: true
+        }, () => {
+            console.log(this.state);
+            });
+        console.log(this.state);
+    }
+    ```
+
+
+- [ ] a few words about router https://reacttraining.com/react-router/web/guides/quick-start
 
 ### Adding dependencies - material-ui / styling
 
