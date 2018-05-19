@@ -41,14 +41,14 @@ class App extends Component {
     }
 
     render() {
-        const {searchVisible} = this.state;
+        const {searchVisible, airports} = this.state;
         return (
             <div className="App">
                 <header className="App-header">
                     <img src={logo} className="App-logo" alt="logo"/>
                     <h1 className="App-title">Welcome to React</h1>
                 </header>
-                {searchVisible && <SearchView onSearchClick={this.onSearchClick}/>}
+                {searchVisible && <SearchView onSearchClick={this.onSearchClick} airports={airports}/>}
                 {!searchVisible && <FlightsView onBackClick={this.onBackClick}/>}
             </div>
         );

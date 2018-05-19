@@ -247,8 +247,8 @@ Please find the proposed agenda below - what we will build step by step.
 ### Adding dependencies - material-ui / styling
 * pull branch `step_2` from this repo if necessary
 - [ ] installing the dependency & usage
-    * https://v0.material-ui.com/#/get-started/usage
-    * `npm i material-ui --save`
+    * https://material-ui.com/getting-started/installation/
+    * `npm i @material-ui.core --save`
     * wrap app in Theme - index.js!
     * stateless component explanation (props, state, 'simple wrapper')
     ```
@@ -365,14 +365,43 @@ Please find the proposed agenda below - what we will build step by step.
     ```
 
 ### Basic inputs for searcher
+- [ ] add inputs to select FROM and TO flight
+    * https://material-ui.com/demos/selects/
+    * code
+    ```
+
+    import InputLabel from '@material-ui/core/InputLabel';
+    import MenuItem from "material-ui/MenuItem";
+    import Select from "@material-ui/core/Select";
+    import {AirportModel} from "../shared/models/AirportModel";
+
+    //render
+    const {onSearchClick, airports} = this.props;
+
+    //inside render
+    <InputLabel htmlFor="from">FROM:</InputLabel>
+    <Select
+        value={''}
+        onChange={this.handleChange}
+        inputProps={{
+            name: 'from',
+            id: 'from',
+        }}>
+        {airports.map(airport => <MenuItem key={airport.id} value={airport}>{airport.city}</MenuItem>)}
+     </Select>
+    ```
+    * remember to add PropTypes and pass airports to SearchView!
+    ```
+    {searchVisible && <SearchView onSearchClick={this.onSearchClick} airports={airports}/>}
+    ```
 
 - [ ] keeping values in "state" - what it is and how it differs from props? (change over time vs. const)
-- [ ] make the inputs "aware" of pending/loading state (locations)
-- [ ] provide data to inputs
-- [ ] keeping input current value in state
 
 ### Spinner/Loader state - a few words about UX/UI
 
+- [ ] refactoring time!
+- [ ] passing over the selected value to container
+- [ ] make the inputs "aware" of pending/loading state (airports)
 - [ ] basic "validation" and button look
 - [ ] pending state & ActivityIndicator
 - [ ] calling the hero API - FlightService & FlightModel 
