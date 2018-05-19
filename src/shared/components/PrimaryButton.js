@@ -4,9 +4,9 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 export class PrimaryButton extends Component {
     render() {
-        const {text, onClick} = this.props; //destructing
+        const {text, onClick, disabled} = this.props; //destructing
         return (
-            <RaisedButton primary onClick={onClick} label={text}/>
+            <RaisedButton primary onClick={onClick} label={text} disabled={disabled}/>
         )
     }
 }
@@ -14,5 +14,10 @@ export class PrimaryButton extends Component {
 
 PrimaryButton.propTypes = {
     text: PropTypes.string.isRequired,
-    onClick: PropTypes.func.isRequired
+    onClick: PropTypes.func.isRequired,
+    disabled: PropTypes.bool
+};
+
+PrimaryButton.defaultProps = {
+    disabled: false
 };

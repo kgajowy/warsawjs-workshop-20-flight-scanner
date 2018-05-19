@@ -9,7 +9,9 @@ class App extends Component {
 
     state = {
         searchVisible: true,
-        airports: []
+        airportsPending: true,
+        airports: [],
+        flights: [],
     };
 
     constructor(props){
@@ -21,15 +23,19 @@ class App extends Component {
     componentDidMount() {
         AirportService.getAirportSources().then(airports => {
             this.setState({
+                airportsPending: false,
                 airports    //shortcut
             })
         })
     }
 
+
     //by default, context of this function is not within the React.Component itself!
-    onSearchClick() {
+    onSearchClick(flights) {
+        console.log(flights);
         this.setState({
-            searchVisible: false
+            searchVisible: false,
+            flights
         })
     }
 
@@ -40,14 +46,18 @@ class App extends Component {
     }
 
     render() {
-        const {searchVisible, airports} = this.state;
+        const {searchVisible, airports, airportsPending} = this.state;
         return (
             <div className="App">
                 <header className="App-header">
                     <img src={logo} className="App-logo" alt="logo"/>
                     <h1 className="App-title">Welcome to React</h1>
                 </header>
-                {searchVisible && <SearchView onSearchClick={this.onSearchClick} airports={airports}/>}
+                {searchVisible && <SearchView
+                    onSearchClick={this.onSearchClick}
+                    airports={airports}
+                    pending={airportsPending}
+                />}
                 {!searchVisible && <FlightsView onBackClick={this.onBackClick}/>}
             </div>
         );

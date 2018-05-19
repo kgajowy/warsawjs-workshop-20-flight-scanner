@@ -533,28 +533,118 @@ Please find the proposed agenda below - what we will build step by step.
     };//no need to .bind to be aware of THIS
     ```
 
-    * end of branch `step
+    * end of branch `step_5`
 
-- [ ] make the inputs "aware" of pending/loading state (airports)
-- [ ] basic "validation" and button look
-- [ ] pending state & ActivityIndicator
-- [ ] calling the hero API - FlightService & FlightModel 
-- [ ] transition
+- [ ] make the inputs "aware" of pending/loading state (airports) (exercise)
+    ```
+    {!pending &&
+                    (<div>
+                        <SelectAirport onChange={(airport) => this._updateAirport(`fromAirport`, airport)}
+                                       airports={airports}
+                                       label={'FROM'}/>
+                        < SelectAirport onChange={(airport) => this._updateAirport(`toAirport`, airport)}
+                                        airports={airports} label={'TO'}/>
+                    </div>)}
+    ```
+
+    ```
+    SearchView.propTypes = {
+        onSearchClick: PropTypes.func.isRequired,
+        airports: PropTypes.arrayOf(PropTypes.instanceOf(AirportModel)),
+        pending: PropTypes.bool
+    };
+
+    SearchView.defaultProps = {
+        pending: true
+    };
+
+    ```
+    * task - add progress indicator and finish/start actually take place
+
+- [ ] basic "validation" and button look (exercise)
+    Helper:
+    ```
+    <PrimaryButton text={`Search for the flights`}
+        onClick={onSearchClick}
+        disabled={fieldsSelected}
+    ```
+- [ ] calling the hero API - FlightService & FlightModel
+    * another (better) way to handle DTO objects
+    ```
+    //FlightModel
+    export class FlightModel {
+        id;
+        price;
+        startHour;
+        length;
+        airline;
+
+        static fromBackendData(data){
+            return Object.assign(new FlightModel(), data)
+        }
+
+        toString(){
+            return `(${this.id}) $ ${this.price} > ${this.startHour} [duration=${this.length}]`;
+        }
+    }
+    ```
+
+    * usage of DTO (hint: normalization!)
+    ```
+    //Service
+    static fetchFlights(fromAirport, toAirport) {
+            return axios.get(`${this.API_URL}/flights/01-01-2018/31-01-2018/${fromAirport.id}/${toAirport.id}`).then(res => {
+                return res.data.map(item => FlightModel.fromBackendData(item));
+            })
+        }
+    ```
+
+    ```
+    //SearchView
+    //with arrow notation, we are not loosing context, therefore bind is not necessary!
+        onSearchPress = () => {
+            this.setState({
+                flightsPending: true
+            }, () => {
+                AirportService.fetchFlights(this.state.fromAirport, this.state.toAirport).then(flights => {
+                    this.setState({
+                        flightsPending: false
+                    }, () => this.props.onSearchClick(flights))
+                });
+            });
+        };
+    ```
+
+    ```
+
+                {(pending || flightsPending) && <CircularProgress />}
+                <br />
+                {!flightsPending && <PrimaryButton text={`Search for the flights`}
+                               onClick={this.onSearchPress}
+                               disabled={fieldsSelected}
+                />}
+    ```
+- [ ] pending state & ActivityIndicator (exercise)
+
+    * end of branch `step_6`
 
 ### Results Model & Presentation
 
 - [ ] displaying the Flight Model
-- [ ] (l)oops!
 
 ### Basic filtering - client side
 
 - [ ] adding min/max (price) inputs+checkboxes & listeners
 - [ ] filtering the results
 
+### Date inputs
+- [ ] make date not being dummy again!
+
 ### Simple Animations :fireworks:
 
 - [ ] Adding "expand mode" with details of given flight
 
 ### [optional] 
- - [ ] \(optional) Adding map to "expand mode"
+ - [ ] Adding map to "expand mode"
+ - [ ] A
  
