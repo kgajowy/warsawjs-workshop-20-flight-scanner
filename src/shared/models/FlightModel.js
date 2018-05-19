@@ -1,12 +1,17 @@
+import {FlightBoundModel} from "./FlightBoundModel";
+
 export class FlightModel {
     id;
     price;
-    startHour;
-    inboundPath;
-    outboundPath;
+    inboundPath = [];
+    outboundPath = [];
 
     static fromBackendData(data){
-        return Object.assign(new FlightModel(), data)
+        const flight = Object.assign(new FlightModel(), data);
+        console.log(data);
+        flight.inboundPath = data.inboundPath.map(path => FlightBoundModel.fromBackendData(path));
+        flight.outboundPath = data.outboundPath.map(path => FlightBoundModel.fromBackendData(path));
+        return flight;
     }
 
     toString(){

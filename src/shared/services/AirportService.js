@@ -1,4 +1,3 @@
-//@flow
 import axios from 'axios';
 import {AirportModel} from "../models/AirportModel";
 import {FlightModel} from "../models/FlightModel";

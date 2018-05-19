@@ -660,8 +660,124 @@ Please find the proposed agenda below - what we will build step by step.
     ```
     * nice-looking way
     ```
-    {flights.map(flight => <FlightView key={flight.id} flight={flight}/>)}
+    export class FlightsView extends Component {
+        render() {
+            const {onBackClick, flights} = this.props;
+            return (
+                <div>
+                    <List component="nav">
+                        {flights.map(flight => {
+                            return (
+                                    <ListItem key={flight.id} >
+                                        <FlightView flight={flight}/>
+                                    </ListItem>
+                            )
+                        })}
+                    </List>
+                    <PrimaryButton text={`Go back`} onClick={onBackClick}/>
+                </div>
+            )
+        }
+    }
     ```
+
+    * add model to keep flights path (in/out for a single "trip")
+    ```
+    export  class FlightBoundModel {
+        airline;
+        airportFrom;
+        airportTo;
+        length;
+        startHour;
+
+        static fromBackendData(data){
+            return Object.assign(new FlightBoundModel(), data);
+        }
+    }
+    ```
+    * flight model upgrade
+    ```
+    import {FlightBoundModel} from "./FlightBoundModel";
+
+    export class FlightModel {
+        id;
+        price;
+        inboundPaths = [];
+        outboundPaths = [];
+
+        static fromBackendData(data){
+            const flight = Object.assign(new FlightModel(), data)
+            flight.inboundPaths = data.inboundPaths.map(path => FlightBoundModel.fromBackendData(path));
+            flight.outboundPaths = data.outboundPaths.map(path => FlightBoundModel.fromBackendData(path));
+            return flight;
+        }
+
+        toString(){
+            return `(${this.id}) $ ${this.price} > ${this.inboundPath} ${this.outboundPath}`;
+        }
+    }
+    ```
+    * FlightView
+    ```
+    import React, {Component} from 'react';
+    import PropTypes from 'prop-types';
+    import { withStyles } from '@material-ui/core/styles';
+    import Stepper from '@material-ui/core/Stepper';
+    import Step from '@material-ui/core/Step';
+    import StepLabel from '@material-ui/core/StepLabel';
+    import StepContent from '@material-ui/core/StepContent';
+    import Button from '@material-ui/core/Button';
+    import Paper from '@material-ui/core/Paper';
+    import Typography from '@material-ui/core/Typography';
+    import {FlightModel} from "../shared/models/FlightModel";
+
+    const styles = theme => ({
+        root: {
+            width: '90%',
+        },
+        button: {
+            marginTop: theme.spacing.unit,
+            marginRight: theme.spacing.unit,
+        },
+        actionsContainer: {
+            marginBottom: theme.spacing.unit * 2,
+        },
+        resetContainer: {
+            padding: theme.spacing.unit * 3,
+        },
+    });
+
+    class FlightView extends Component {
+        render() {
+            const { classes, flight } = this.props;
+            const stepsIn = flight.inboundPath;
+
+            return (
+                <div className={classes.root}>
+                    Flight ID: {flight.id} <br />
+                    <Stepper activeStep={999} orientation="vertical">
+                        {stepsIn.map((flyPath, index) => {
+                            return (
+                                <Step key={index}>
+                                    <StepLabel>From: {flyPath.airportFrom} > To: {flyPath.airportTo} (Duration: {flyPath.length})</StepLabel>
+                                </Step>
+                            );
+                        })}
+                    </Stepper>
+                </div>
+            );
+        }
+    }
+
+    FlightView.propTypes = {
+        classes: PropTypes.object,
+        flight: PropTypes.instanceOf(FlightModel).isRequired
+    };
+
+    export default withStyles(styles)(FlightView);
+
+    ```
+    * make your own? (optional - if we have enought time)
 
 ### Basic filtering - client side
 
