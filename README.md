@@ -31,11 +31,177 @@ Please find the proposed agenda below - what we will build step by step.
 
 - [ ] what is a React Component?
 - [ ] creating and including a simple component ("Next Button")
+
+    ```
+    import React, {Component} from 'react';
+
+    export class SearchButton extends Component {
+        render() {
+            return (
+                <button onClick={console.log}>Next</button>
+            )
+        }
+    }
+
+    // in App.js
+    import {SearchButton} from './shared/components/SearchButton'
+    ```
+
 - [ ] "props" - what it is?
+
+    * make a text in our Button be "configurable"
+
+    ```
+    render() {
+        const {text} = this.props; //destructing
+        return (
+            <button onClick={console.log}>{text}</button>
+        )
+    }
+    ```
+
+    * what happened to our app?
+
+    ```
+    <SearchButton text={'Go!'} />
+    ```
+
+    * should I really remember which props are where?
+    `npm i prop-types --save`
+
+    ```
+    import PropTypes from 'prop-types';
+    // after class declaration
+    SearchButton.propTypes = {
+        text: PropTypes.string
+    };
+    ```
+
+    Try writing `<SearchButton` and press space (or any other way to see hints!)
+
+    * ... but I want to mark it as mandatory!
+
+    ```
+    //..
+        PropTypes.string.isRequired
+    //..
+
+    ```
+
+    will throw us an error as expected!
+
 - [ ] creating a target component with results
+
+    ```
+    import React, {Component} from 'react';
+    import PropTypes from 'prop-types';
+
+    export class FlightsView extends Component {
+        render() {
+            return (
+                <div>
+                    <ol>
+                        <li>Flight #1</li>
+                        <li>Flight #2</li>
+                        <li>Flight #3</li>
+                    </ol>
+                    <button>Go back</button>
+                </div>
+            )
+        }
+    }
+
+    FlightsView.propTypes = {
+
+    };
+    ```
+
+    * try to display it directly in the App.js
+
 - [ ] making them "work" together (naive way)
+
+    * a few words about component architecture and responsibilities
+    * influence on Unit Tests
+
+    * Create FlightsView
+    ```
+    import React, {Component} from 'react';
+    import PropTypes from 'prop-types';
+
+    export class FlightsView extends Component {
+        render() {
+            return (
+                <div>
+                    <ol>
+                        <li>Flight #1</li>
+                        <li>Flight #2</li>
+                        <li>Flight #3</li>
+                    </ol>
+                    <button>Go back</button>
+                </div>
+            )
+        }
+    }
+
+    FlightsView.propTypes = {
+
+    };
+    ```
+
+    * Create SearchView:
+
+    ```
+    import React, {Component} from 'react';
+    import PropTypes from 'prop-types';
+    import {SearchButton} from "../shared/components/SearchButton";
+
+    export class SearchView extends Component {
+        render() {
+            const {onClick} = this.props;
+            return (
+                <div>
+                    <SearchButton text={`Search for the flights`} onClick={onClick}/>
+                </div>
+            )
+        }
+    }
+
+    SearchView.propTypes = {
+        onClick: PropTypes.func.isRequired
+    };
+
+    ```
+
+    * and modify SearchButton to make use of passed onClick prop:
+
+    ```
+    <button onClick={onClick}>{text}</button>
+    ```
+
+    Don't forget about new prop for destruct and propTypes!
+
+    * wrap up relevant changes in App.js:
+    ```
+    searchPressed() {
+            console.log('search pressed');
+        }
+
+        render() {
+            return (
+                <div className="App">
+                    <header className="App-header">
+                        <img src={logo} className="App-logo" alt="logo"/>
+                        <h1 className="App-title">Welcome to React</h1>
+                    </header>
+                    <SearchView onClick={this.searchPressed}/>
+                    <FlightsView/>
+                </div>
+            );
+        }
+     ```
+
+- [ ] keeping values in "state" - what it is and how it differs from props? (change over time vs. const)
 - [ ] a few words about router
-- [ ] making a "transition" -> adding a click event
 
 ### Adding dependencies - material-ui / styling
 
