@@ -778,20 +778,16 @@ Please find the proposed agenda below - what we will build step by step.
 
     ```
     * make your own? (optional - if we have enought time)
+    * end of branch `step_7`
 
 ### Basic filtering - client side
 
 - [ ] adding min/max (price) inputs+checkboxes & listeners
 - [ ] filtering the results
 
-### Date inputs
-- [ ] make date not being dummy again!
+* end of branch `step_8`
 
-### Simple Animations :fireworks:
-
-- [ ] Adding "expand mode" with details of given flight
-
-### [optional] 
- - [ ] Adding map to "expand mode"
- - [ ] A
- 
+### Whats next?
+- [ ] make date not being dummy again! (add Date Inputs)
+- [ ] add icons to buttons
+- [ ] add animation & expandable Flight Details
