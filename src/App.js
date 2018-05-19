@@ -3,17 +3,28 @@ import logo from './logo.svg';
 import './App.css';
 import {FlightsView} from "./flights/FlightsView";
 import {SearchView} from "./search/SearchView";
+import {AirportService} from "./shared/services/AirportService";
 
 class App extends Component {
 
     state = {
-        searchVisible: true
+        searchVisible: true,
+        airports: []
     };
 
     constructor(props){
         super(props);
         this.onSearchClick = this.onSearchClick.bind(this);
         this.onBackClick = this.onBackClick.bind(this);
+    }
+
+    componentDidMount() {
+        AirportService.getAirportSources().then(airports => {
+            console.log(airports);
+            this.setState({
+                airports    //shortcut
+            })
+        })
     }
 
     //by default, context of this function is not within the React.Component itself!

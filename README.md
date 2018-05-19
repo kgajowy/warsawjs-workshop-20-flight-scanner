@@ -308,9 +308,61 @@ Please find the proposed agenda below - what we will build step by step.
 
 ### Adding dependencies - axios / API Service
 * pull branch `step_3` from this repo if necessary
-- [ ] installing the dependency
+- [ ] installing the dependency `npm i axios --save`
 - [ ] making a "Service" to fetch Locations
-- [ ] few words about Views, Models and Services
+    * AirportModel.js
+    ```
+    export class AirportModel {
+        id;
+        code;
+        country;
+        city;
+
+        constructor(data){
+            this.id = data.id;
+            this.code = data.code;
+            this.country = data.country;
+            this.city = data.city;
+        }
+    }
+    ```
+
+    * AirPortService:
+    ```
+    import axios from 'axios';
+    import {AirportModel} from "../models/AirportModel";
+
+    export class AirportService {
+
+        static API_URL = `http://warsawjs-flights-api.herokuapp.com`;
+
+        static getAirportSources() {
+            return axios.get(`${this.API_URL}/airports`)
+                .then(res => {
+                    return res.data.map(item => new AirportModel(item));
+                });
+        }
+
+    }
+    ```
+
+- [ ] component lifecycle https://reactjs.org/docs/react-component.html
+    * make a sample use of our Service and assign results to state
+    ```
+    state = {
+            searchVisible: true,
+            airports: []
+        };
+
+        componentDidMount() {
+            AirportService.getAirportSources().then(airports => {
+                console.log(airports);
+                this.setState({
+                    airports    //shortcut
+                })
+            })
+        }
+    ```
 
 ### Basic inputs for searcher
 
