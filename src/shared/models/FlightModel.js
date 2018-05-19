@@ -2,14 +2,14 @@ export class FlightModel {
     id;
     price;
     startHour;
-    length;
-    airline;
+    inboundPath;
+    outboundPath;
 
     static fromBackendData(data){
         return Object.assign(new FlightModel(), data)
     }
 
     toString(){
-        return `(${this.id}) $ ${this.price} > ${this.startHour} [duration=${this.length}]`;
+        return `(${this.id}) $ ${this.price} > ${this.inboundPath} ${this.outboundPath}`;
     }
 }

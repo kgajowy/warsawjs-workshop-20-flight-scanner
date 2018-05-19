@@ -569,6 +569,8 @@ Please find the proposed agenda below - what we will build step by step.
         disabled={fieldsSelected}
     ```
 - [ ] calling the hero API - FlightService & FlightModel
+    * warning - as probably we are getting out of time, we cannot keep our code super clean!
+    * (optional todo if we have enough time - in/outPath models
     * another (better) way to handle DTO objects
     ```
     //FlightModel
@@ -576,15 +578,15 @@ Please find the proposed agenda below - what we will build step by step.
         id;
         price;
         startHour;
-        length;
-        airline;
+        inboundPath;
+        outboundPath;
 
         static fromBackendData(data){
             return Object.assign(new FlightModel(), data)
         }
 
         toString(){
-            return `(${this.id}) $ ${this.price} > ${this.startHour} [duration=${this.length}]`;
+            return `(${this.id}) $ ${this.price} > ${this.inboundPath} ${this.outboundPath}`;
         }
     }
     ```
@@ -630,7 +632,36 @@ Please find the proposed agenda below - what we will build step by step.
 
 ### Results Model & Presentation
 
+- [ ] talk about how messy (really?) we are starting to be (two containers, passing data over)
+- [ ] better solution? redux & state managment
+- [ ] without redux? SearchContainer > SearchView & FlightContainer > FlightView
+- [ ] pass the data to FlightsView
+    * add propTypes
+    ```
+    FlightsView.propTypes = {
+        onBackClick: PropTypes.func.isRequired,
+        flights: PropTypes.arrayOf(PropTypes.instanceOf(FlightModel))
+    };
+
+    FlightsView.defaultProps = {
+        flights: []
+    };
+    ```
+    * add passing the data to flightv view
+    ```
+    {!searchVisible && <FlightsView onBackClick={this.onBackClick} flights={flights} />}
+    ```
 - [ ] displaying the Flight Model
+    * quick way to see our hard work!
+    ```
+    <ol>
+        {flights.map(flight => <div>{flight.toString()}</div>)}
+    </ol>
+    ```
+    * nice-looking way
+    ```
+    {flights.map(flight => <FlightView key={flight.id} flight={flight}/>)}
+    ```
 
 ### Basic filtering - client side
 

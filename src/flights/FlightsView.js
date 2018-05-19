@@ -1,16 +1,17 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {PrimaryButton} from "../shared/components/PrimaryButton";
+import {FlightModel} from "../shared/models/FlightModel";
+import FlightView from "./FlightView";
 
 export class FlightsView extends Component {
     render() {
-        const {onBackClick} = this.props;
+        const {onBackClick, flights} = this.props;
+        console.log(flights);
         return (
             <div>
                 <ol>
-                    <li>Flight #1</li>
-                    <li>Flight #2</li>
-                    <li>Flight #3</li>
+                    {flights.map(flight => <FlightView key={flight.id} flight={flight}/>)}
                 </ol>
                 <PrimaryButton text={`Go back`} onClick={onBackClick}/>
             </div>
@@ -19,5 +20,10 @@ export class FlightsView extends Component {
 }
 
 FlightsView.propTypes = {
-    onBackClick: PropTypes.func.isRequired
+    onBackClick: PropTypes.func.isRequired,
+    flights: PropTypes.arrayOf(PropTypes.instanceOf(FlightModel))
+};
+
+FlightsView.defaultProps = {
+    flights: []
 };

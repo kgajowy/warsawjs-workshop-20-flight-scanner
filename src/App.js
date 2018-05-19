@@ -32,7 +32,6 @@ class App extends Component {
 
     //by default, context of this function is not within the React.Component itself!
     onSearchClick(flights) {
-        console.log(flights);
         this.setState({
             searchVisible: false,
             flights
@@ -46,7 +45,7 @@ class App extends Component {
     }
 
     render() {
-        const {searchVisible, airports, airportsPending} = this.state;
+        const {searchVisible, airports, airportsPending, flights} = this.state;
         return (
             <div className="App">
                 <header className="App-header">
@@ -58,7 +57,7 @@ class App extends Component {
                     airports={airports}
                     pending={airportsPending}
                 />}
-                {!searchVisible && <FlightsView onBackClick={this.onBackClick}/>}
+                {!searchVisible && <FlightsView onBackClick={this.onBackClick} flights={flights} />}
             </div>
         );
     }
