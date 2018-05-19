@@ -782,8 +782,18 @@ Please find the proposed agenda below - what we will build step by step.
 
 ### Basic filtering - client side
 
-- [ ] adding min/max (price) inputs+checkboxes & listeners
-- [ ] filtering the results
+- [ ] adding max (price) input & filtering
+    ```
+    <h5>Max Price filter [${currentMaxPrice}]</h5>
+    <Slider step={100} value={2000} min={0} max={9999} onChange={(event, value) => this.setState({currentMaxPrice: value})}/>
+
+    ```
+    * we have two options: pass `shouldShow` to FlightView or filter the results
+    * pros and cons - opinion gathering among participants
+    ```
+    {fitsMaxPrice && <Error color={'red'}/>}
+    <ActionFlightTakeoff color={'blue'}/>
+    ```
 
 * end of branch `step_8`
 

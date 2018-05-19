@@ -5,6 +5,8 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import {FlightModel} from "../shared/models/FlightModel";
+import ActionFlightTakeoff from 'material-ui/svg-icons/action/flight-takeoff';
+import Error from 'material-ui/svg-icons/alert/warning'
 
 const styles = theme => ({
     root: {
@@ -24,12 +26,14 @@ const styles = theme => ({
 
 class FlightView extends Component {
     render() {
-        const { classes, flight } = this.props;
+        const { classes, flight, fitsMaxPrice } = this.props;
         const stepsIn = flight.inboundPath;
 
         return (
-            <div className={classes.root}>
-                Flight ID: {flight.id} <br />
+            <div className={[classes.root]}>
+                {fitsMaxPrice && <Error color={'red'}/>}
+                <ActionFlightTakeoff color={'blue'}/>
+                Flight ID: {flight.id} - price {flight.price} <br />
                 <Stepper activeStep={999} orientation="vertical">
                     {stepsIn.map((flyPath, index) => {
                         return (
@@ -46,7 +50,12 @@ class FlightView extends Component {
 
 FlightView.propTypes = {
     classes: PropTypes.object,
-    flight: PropTypes.instanceOf(FlightModel).isRequired
+    flight: PropTypes.instanceOf(FlightModel).isRequired,
+    fitsMaxPrice: PropTypes.bool
+};
+
+FlightView.defaultProps = {
+    fitsMaxPrice: true
 };
 
 export default withStyles(styles)(FlightView);
