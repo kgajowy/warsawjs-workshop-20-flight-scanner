@@ -10,4 +10,8 @@ export class AirportModel {
         this.country = data.country;
         this.city = data.city;
     }
+
+    toString(){
+        return `(${this.code}) ${this.country} > ${this.city}`;
+    }
 }

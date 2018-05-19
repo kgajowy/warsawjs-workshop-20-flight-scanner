@@ -20,7 +20,6 @@ class App extends Component {
 
     componentDidMount() {
         AirportService.getAirportSources().then(airports => {
-            console.log(airports);
             this.setState({
                 airports    //shortcut
             })

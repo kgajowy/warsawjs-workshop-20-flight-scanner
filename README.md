@@ -398,9 +398,143 @@ Please find the proposed agenda below - what we will build step by step.
 - [ ] keeping values in "state" - what it is and how it differs from props? (change over time vs. const)
 
 ### Spinner/Loader state - a few words about UX/UI
-
+* pull `step_4` branch to start from there
 - [ ] refactoring time!
-- [ ] passing over the selected value to container
+    * we will have two inputs with very similar behavior, thus we want the following:
+    ```
+    import React, {Component} from 'react';
+    import PropTypes from 'prop-types';
+    import {PrimaryButton} from "../shared/components/PrimaryButton";
+    import {AirportModel} from "../shared/models/AirportModel";
+    import {SelectAirport} from "../shared/components/SelectAirport";
+
+    export class SearchView extends Component {
+
+        render() {
+            const {onSearchClick, airports} = this.props;
+            return (
+                <div>
+                    <SelectAirport onChange={console.log} airports={airports}/>
+                    <SelectAirport onChange={console.log} airports={airports} label={'TO'}/>
+                    <br/>
+
+                    <PrimaryButton text={`Search for the flights`} onClick={onSearchClick}/>
+                </div>
+            )
+        }
+    }
+
+    SearchView.propTypes = {
+        onSearchClick: PropTypes.func.isRequired,
+        airports: PropTypes.arrayOf(PropTypes.instanceOf(AirportModel))
+    };
+
+    ```
+    * how would our SelectAirport look like?
+    ```
+    import React, {Component} from 'react';
+    import PropTypes from 'prop-types';
+    import InputLabel from '@material-ui/core/InputLabel';
+    import MenuItem from "material-ui/MenuItem";
+    import Select from "@material-ui/core/Select";
+    import {AirportModel} from "../models/AirportModel";
+
+    export class SelectAirport extends Component {
+
+        state = {
+            selectedAirport: '' //cannot be null, as it would be un-controlled input
+        };
+
+        extractSelectedValue(event) {
+            return event.target.value;
+        }
+
+        render() {
+            const {onChange, airports, label} = this.props;
+            const {selectedAirport} = this.state;
+            return (
+                <div>
+                    <InputLabel htmlFor="from">{label}</InputLabel>
+                    <Select
+                        autoWidth
+                        value={selectedAirport}
+
+                        onChange={(event) => {
+                            const airportIndex = this.extractSelectedValue(event);
+                            this.setState({
+                                selectedAirport: airportIndex
+                            });
+                            //we need to call 'onChange' with the airport! and the value is just an index
+                            onChange(airports[airportIndex]);
+                        }}
+                        inputProps={{
+                            name: 'airport-select',
+                            id: 'airport-select',
+                        }}
+                    >
+                        {airports.map((airport, index) => <MenuItem key={airport.id}
+                                                           value={index}>{airport.toString()}</MenuItem>)}
+                    </Select>
+
+                    <br/>
+                </div>
+            )
+        }
+    }
+
+    SelectAirport.propTypes = {
+        onChange: PropTypes.func.isRequired,
+        airports: PropTypes.arrayOf(PropTypes.instanceOf(AirportModel)),
+        label: PropTypes.string
+    };
+
+    SelectAirport.defaultProps = {
+        label: 'SELECT'
+    };
+
+    ```
+    * extra task - something more was added to properly display everything - notice and add your own :)
+    * (optional) make it look even better! (exercise)
+    * Follow `https://material-ui.com/demos/selects/` to add theme styles from material-ui
+    ```
+    const styles = theme => ({
+      formControl: {
+        margin: theme.spacing.unit,
+        minWidth: 120,
+      },
+    });
+    ```
+    Wrap our component into:
+    ```
+    <FormControl className={classes.formControl}>
+    ```
+
+    Change the way we export our component:
+    ```
+    ControlledOpenSelect.propTypes = {
+      classes: PropTypes.object.isRequired,
+    };
+
+    export default withStyles(styles)(ControlledOpenSelect);
+    ```
+    Remember that we had {namedImport} in the SearchView! (change to import SelectAirport from ...)
+
+- [ ] passing over the selected value to container - store in the state!
+    ```
+    state = {
+        fromAirport: null,
+        toAirport: null
+    };
+
+    _updateAirport = (key, airport) => {
+        this.setState({
+            [key]: airport
+        }, () => {console.log(this.state)});
+    };//no need to .bind to be aware of THIS
+    ```
+
+    * end of branch `step
+
 - [ ] make the inputs "aware" of pending/loading state (airports)
 - [ ] basic "validation" and button look
 - [ ] pending state & ActivityIndicator
